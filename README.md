@@ -1,3 +1,5 @@
+![open-wallet](assets/open-wallet.png)
+
 # Open Wallet
 
 **A secure, tokenized mobile wallet system optimized for vault transactions and revenue growth**

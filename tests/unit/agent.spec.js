@@ -15,7 +15,7 @@ describe('AgentService', () => {
     mockA2AService = {
       executeTransfer: jest.fn()
     };
-    agentService = new AgentService(mockDb, {}, mockA2AService);
+    agentService = new AgentService(mockDb, {});
   });
 
   describe('registerAgent', () => {
@@ -55,7 +55,7 @@ describe('AgentService', () => {
         fromAgentId: 'agent1',
         toAgentId: 'agent2',
         amount: 100
-      })).rejects.toThrow(/Zero Trust Validation Failed: Transfer amount 100 exceeds per-transaction limit of 50/);
+      })).rejects.toThrow(/Zero Trust Validation Failed: Amount 100 exceeds agent per-transaction limit of 50/);
     });
 
     it('should throw if counterparty is not authorized', async () => {
@@ -101,7 +101,8 @@ describe('AgentService', () => {
       const expectedResult = { success: true, transferId: 'tx123' };
       mockA2AService.executeTransfer.mockResolvedValue(expectedResult);
 
-      const result = await agentService.performA2ATransfer(transferParams);
+      const delegatingAgentService = new AgentService(mockDb, {}, mockA2AService);
+      const result = await delegatingAgentService.performA2ATransfer(transferParams);
 
       expect(mockA2AService.executeTransfer).toHaveBeenCalledWith({
         fromAgentId: 'agent1',

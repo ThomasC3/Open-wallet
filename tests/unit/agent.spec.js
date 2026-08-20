@@ -102,7 +102,8 @@ describe('AgentService', () => {
       const expectedResult = { success: true, transferId: 'tx123' };
       mockA2AService.executeTransfer.mockResolvedValue(expectedResult);
 
-      const result = await agentService.performA2ATransfer(transferParams);
+      const delegatingAgentService = new AgentService(mockDb, {}, mockA2AService);
+      const result = await delegatingAgentService.performA2ATransfer(transferParams);
 
       expect(mockA2AService.executeTransfer).toHaveBeenCalledWith({
         fromAgentId: 'agent1',

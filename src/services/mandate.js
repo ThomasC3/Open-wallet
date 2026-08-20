@@ -113,7 +113,7 @@ class MandateService {
     try {
       decoded = jwt.verify(token, this.signingKey, { algorithms: ["HS256"] });
     } catch (error) {
-      if (error.name === "TokenExpiredError") {
+      if (error.name === "TokenExpiredError" || error.message?.includes("expired")) {
         throw new Error("Zero Trust Validation Failed: Mandate has expired");
       }
       throw new Error(
